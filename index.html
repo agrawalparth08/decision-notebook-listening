@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Listening Library · The Decision Notebook</title>
+<meta name="description" content="25 audio episodes on general management, one per subject. One thread per subject, frameworks as tools, case stories told properly.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{
+  --navy:#14213d;--navy-deep:#0b1526;--terracotta:#b45a3c;--terracotta-soft:#d9825f;
+  --bg:#faf7f2;--card:#f1ebe1;--line:#d8cfc0;--ink-muted:#5a6270;--sourced:#2f6b4f;
+  --font-head:'Fraunces',Georgia,serif;--font-body:'IBM Plex Sans',-apple-system,sans-serif;--font-mono:'IBM Plex Mono','Courier New',monospace;
+  --player-h:88px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--navy);line-height:1.6;margin:0;padding-bottom:calc(var(--player-h) + 24px)}
+h1,h2,h3{font-family:var(--font-head)}
+a{color:var(--terracotta)}
+.wrap{max-width:960px;margin:0 auto;padding:0 1.25rem}
+.mono{font-family:var(--font-mono)}
+
+/* Hero */
+.hero{background:linear-gradient(160deg,var(--navy-deep) 0%,var(--navy) 55%,#2a2a3f 100%);color:#fff;padding:2.5rem 0 2rem;border-bottom:5px solid var(--terracotta)}
+.hero .wrap{display:flex;gap:1.75rem;align-items:flex-end;flex-wrap:wrap}
+.cover{width:220px;height:220px;flex:none;border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.45);position:relative;overflow:hidden;
+  background:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 3px,transparent 3px 22px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.10) 0 2px,transparent 2px 46px),
+    linear-gradient(135deg,#c2694a 0%,var(--terracotta) 45%,#8f4229 100%)}
+.cover .arch{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:60px 60px 0 0;background:var(--navy-deep);opacity:.92}
+.cover .arch::after{content:"";position:absolute;left:50%;top:38px;transform:translateX(-50%);width:44px;height:82px;border-radius:22px 22px 0 0;background:var(--terracotta-soft)}
+.cover .tag{position:absolute;left:14px;bottom:12px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.14em;color:#fff;opacity:.9}
+.hero-text{flex:1;min-width:260px}
+.kicker{font-family:var(--font-mono);color:var(--terracotta-soft);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{margin:.35rem 0 .5rem;font-size:clamp(1.9rem,5vw,3.2rem);line-height:1.05;color:#fff;font-weight:700}
+.hero p{margin:0 0 1rem;color:#c9c2b4;max-width:58ch;font-size:.96rem}
+.hero .meta{font-family:var(--font-mono);font-size:.78rem;color:#c9c2b4;margin-bottom:1.1rem}
+.hero .meta b{color:#fff;font-weight:500}
+.actions{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
+.btn{font-family:var(--font-body);font-weight:600;border:none;border-radius:999px;padding:.7rem 1.4rem;cursor:pointer;font-size:.95rem;display:inline-flex;align-items:center;gap:.5rem;transition:transform .1s,background .15s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--terracotta);color:#fff}
+.btn.primary:hover{background:var(--terracotta-soft)}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+.btn.ghost:hover{border-color:#fff}
+
+/* Track list */
+main{padding-top:1.5rem}
+.section-head{display:flex;align-items:baseline;gap:.7rem;margin:1.8rem 0 .5rem;border-bottom:2px solid var(--terracotta);padding-bottom:.3rem}
+.section-head h2{margin:0;font-size:1.25rem;font-weight:600}
+.section-head .count{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-muted)}
+.track{display:grid;grid-template-columns:2.2rem 1fr auto;gap:.9rem;align-items:center;padding:.7rem .6rem;border-radius:8px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--line)}
+.track:hover{background:var(--card)}
+.track.active{background:var(--card);box-shadow:inset 3px 0 0 var(--terracotta)}
+.track .n{font-family:var(--font-mono);font-size:.8rem;color:var(--ink-muted);text-align:center;position:relative}
+.track:hover .n span,.track.active .n span{visibility:hidden}
+.track .n::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:0;height:0;border-left:11px solid var(--navy);border-top:7px solid transparent;border-bottom:7px solid transparent;opacity:0}
+.track:hover .n::after{opacity:1}
+.track.active .n::after{opacity:1;border-left-color:var(--terracotta)}
+.track.active.playing .n::after{border:none;width:12px;height:14px;border-left:4px solid var(--terracotta);border-right:4px solid var(--terracotta)}
+.track .t{min-width:0}
+.track .title{font-weight:600;font-size:1rem;line-height:1.3}
+.track .sub{font-size:.82rem;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track .r{display:flex;align-items:center;gap:.8rem}
+.track .dur{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-muted)}
+.track .prog{width:64px;height:4px;border-radius:2px;background:var(--line);overflow:hidden;display:none}
+.track .prog i{display:block;height:100%;width:0;background:var(--sourced)}
+.track .prog.show{display:block}
+.track .read{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--terracotta);background:transparent;border:1px solid var(--line);border-radius:4px;padding:.2rem .45rem;cursor:pointer}
+.track .read:hover{background:var(--terracotta);color:#fff;border-color:var(--terracotta)}
+.track .na{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);background:var(--card);padding:.2rem .5rem;border-radius:4px}
+@media (max-width:560px){
+  .track{grid-template-columns:1.8rem 1fr auto;gap:.6rem}
+  .track .prog{display:none!important}
+  .track .read{display:none}
+  .cover{width:150px;height:150px}
+  .cover .arch{width:84px;height:84px}
+  .cover .arch::after{top:26px;width:30px;height:58px}
+}
+
+/* About */
+.about{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0}
+.about h3{margin:.2rem 0 .4rem;font-size:1.05rem}
+.about p{margin:.4rem 0;font-size:.92rem}
+
+/* Drawer: read along */
+.drawer{position:fixed;inset:0;background:rgba(11,21,38,.55);display:none;z-index:40}
+.drawer.open{display:block}
+.drawer .panel{position:absolute;right:0;top:0;bottom:0;width:min(640px,100%);background:var(--bg);overflow:auto;padding:1.25rem 1.5rem calc(var(--player-h) + 2rem);box-shadow:-10px 0 30px rgba(0,0,0,.25)}
+.drawer .panel h2{margin:.2rem 0 .2rem;font-size:1.4rem;border:none}
+.drawer .close{position:sticky;top:0;float:right;background:var(--navy);color:#fff;border:none;border-radius:999px;width:36px;height:36px;cursor:pointer;font-size:1.1rem}
+.drawer .script p{font-size:.95rem;color:#333a49;margin:.75rem 0}
+
+/* Player bar */
+.player{position:fixed;left:0;right:0;bottom:0;height:var(--player-h);background:var(--navy-deep);color:#fff;border-top:3px solid var(--terracotta);z-index:50;box-shadow:0 -8px 30px rgba(0,0,0,.25)}
+.player .inner{max-width:960px;margin:0 auto;height:100%;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center;padding:0 1.25rem}
+.player .now{display:flex;align-items:center;gap:.7rem;min-width:0;width:260px}
+.player .thumb{width:48px;height:48px;border-radius:5px;flex:none;background:linear-gradient(135deg,#c2694a,#8f4229);position:relative}
+.player .thumb::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:12px 12px 0 0;background:var(--navy-deep)}
+.player .now .t{min-width:0}
+.player .now .title{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player .now .sub{font-size:.74rem;color:#c9c2b4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player .ctl{display:flex;flex-direction:column;align-items:center;gap:.35rem;min-width:0}
+.player .btns{display:flex;align-items:center;gap:1.1rem}
+.ib{background:none;border:none;color:#fff;cursor:pointer;padding:.2rem;opacity:.85;display:flex;align-items:center}
+.ib:hover{opacity:1;color:var(--terracotta-soft)}
+.ib svg{width:22px;height:22px;fill:currentColor}
+.ib.big{width:44px;height:44px;border-radius:50%;background:#fff;color:var(--navy-deep);justify-content:center;opacity:1}
+.ib.big:hover{background:var(--terracotta-soft);color:#fff}
+.ib.big svg{width:20px;height:20px}
+.seek{display:flex;align-items:center;gap:.6rem;width:100%;max-width:560px}
+.seek .tm{font-family:var(--font-mono);font-size:.7rem;color:#c9c2b4;min-width:40px;text-align:center}
+.seek .bar{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.2);cursor:pointer;position:relative}
+.seek .bar i{display:block;height:100%;width:0;background:var(--terracotta);border-radius:3px}
+.seek .bar:hover i{background:var(--terracotta-soft)}
+.player .extra{display:flex;align-items:center;gap:.5rem}
+.rate{font-family:var(--font-mono);font-size:.72rem;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:.25rem .45rem;cursor:pointer}
+.rate:hover{border-color:#fff}
+.player .status{font-family:var(--font-mono);font-size:.7rem;color:#c9c2b4}
+@media (max-width:720px){
+  :root{--player-h:112px}
+  .player .inner{grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:.35rem .8rem;padding:.55rem 1rem}
+  .player .now{width:auto;grid-column:1}
+  .player .extra{grid-column:2;grid-row:1}
+  .player .ctl{grid-column:1/-1;grid-row:2}
+  .player .btns{gap:.9rem}
+  .player .thumb{width:38px;height:38px}
+  .seek{max-width:none}
+}
+
+footer{border-top:1px solid var(--line);margin-top:2.5rem;padding:1rem 0 1.5rem;font-size:.78rem;color:var(--ink-muted)}
+footer p{margin:.3rem 0}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="cover" aria-hidden="true"><div class="arch"></div><div class="tag">Audio · 25</div></div>
+    <div class="hero-text">
+      <div class="kicker">Audio series · The Decision Notebook</div>
+      <h1>The Listening Library</h1>
+      <p>Twenty-five general management subjects, as full-length episodes for the ears. One thread per subject, the frameworks as tools, and the case stories told properly. Built for the commute, the walk, and the fifteen minutes before you sleep.</p>
+      <div class="meta"><b>25 episodes</b> · <b id="total-hours">about 12.5 hours</b> · Narrated in Parth's voice</div>
+      <div class="actions">
+        <button class="btn primary" id="play-all"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play from the start</button>
+        <button class="btn ghost" id="resume" hidden>Resume where I left off</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="list"></div>
+
+  <section class="about">
+    <h3>How to use this series</h3>
+    <p>Each episode does three things. It finds the one thread that holds the subject together. It walks through the frameworks as tools with a job, not definitions to memorise. And it tells the case stories, because that is where the ideas stop being ideas.</p>
+    <p>Treat the episodes as the friend who explains the case the night before class. They are not a replacement for reading the cases. Your position in every episode is remembered on this device, so you can stop and pick up later.</p>
+  </section>
+</main>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="panel">
+    <button class="close" id="drawer-close" aria-label="Close">×</button>
+    <div class="kicker" id="drawer-kicker"></div>
+    <h2 id="drawer-title"></h2>
+    <div class="script" id="drawer-body"><p>Loading the script…</p></div>
+  </div>
+</div>
+
+<div class="player" id="player">
+  <div class="inner">
+    <div class="now">
+      <div class="thumb" aria-hidden="true"></div>
+      <div class="t">
+        <div class="title" id="p-title">Pick an episode</div>
+        <div class="sub" id="p-sub">The Listening Library</div>
+      </div>
+    </div>
+    <div class="ctl">
+      <div class="btns">
+        <button class="ib" id="p-prev" title="Previous episode" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+        <button class="ib" id="p-back" title="Back 15 seconds" aria-label="Back 15 seconds"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg></button>
+        <button class="ib big" id="p-play" aria-label="Play or pause"><svg viewBox="0 0 24 24" id="p-play-icon"><path d="M8 5v14l11-7z"/></svg></button>
+        <button class="ib" id="p-fwd" title="Forward 30 seconds" aria-label="Forward 30 seconds"><svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6h2c0 4.4-3.6 8-8 8s-8-3.6-8-8 3.6-8 8-8z"/></svg></button>
+        <button class="ib" id="p-next" title="Next episode" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+      </div>
+      <div class="seek">
+        <span class="tm" id="p-cur">0:00</span>
+        <div class="bar" id="p-bar"><i id="p-fill"></i></div>
+        <span class="tm" id="p-dur">--:--</span>
+      </div>
+    </div>
+    <div class="extra">
+      <button class="rate" id="p-rate" title="Playback speed">1.0×</button>
+    </div>
+  </div>
+</div>
+
+<footer class="wrap">
+  <p>Scripts are personal study notes, checked for plain language, then narrated with an AI clone of the author's voice via ElevenLabs.</p>
+  <p class="mono">Audio files live in the <code>audio/</code> folder next to this page. Any episode without a file shows as "not yet generated".</p>
+</footer>
+
+<audio id="au" preload="metadata"></audio>
+
+<script>
+// ---------- Episode catalogue ----------
+const SECTIONS = [
+  {name:"Start here", eps:[
+    {id:"trailer", title:"The Series", sub:"Series trailer", min:1}]},
+  {name:"Economics and policy", eps:[
+    {id:"micro", title:"Microeconomics", sub:"Prices, choices and the games underneath", min:33},
+    {id:"economics", title:"Macroeconomics and Policy", sub:"Reading the whole economy without fear", min:29},
+    {id:"india", title:"Indian Economy", sub:"The giant, examined honestly", min:34}]},
+  {name:"Finance and accounting", eps:[
+    {id:"fra", title:"Financial Statement Analysis", sub:"Reading the numbers like a sceptic", min:28},
+    {id:"mcc", title:"Cost Accounting and Control", sub:"What things really cost", min:32},
+    {id:"corpfin", title:"Corporate Finance", sub:"What money costs", min:33}]},
+  {name:"Operations and decisions", eps:[
+    {id:"ops", title:"Operations Management", sub:"Flow, bottlenecks and the tyranny of variability", min:31},
+    {id:"qdm", title:"Decision Analysis", sub:"Thinking in probabilities without pain", min:28},
+    {id:"mc", title:"Spreadsheet Modelling", sub:"Spreadsheets that tell the truth", min:29},
+    {id:"bigdata", title:"Business Analytics", sub:"From data to decisions, carefully", min:29}]},
+  {name:"Markets and customers", eps:[
+    {id:"marketing", title:"Marketing", sub:"Choosing customers, then deserving them", min:30},
+    {id:"asp", title:"Advertising and Digital Marketing", sub:"Buying attention without burning trust", min:27},
+    {id:"retail", title:"Retail and Customer Relationships", sub:"The store strikes back", min:34}]},
+  {name:"People and organisation", eps:[
+    {id:"ob", title:"Organisational Behaviour", sub:"Why good people do puzzling things", min:31},
+    {id:"od", title:"Organisational Change and Culture", sub:"Why change programmes stall", min:32},
+    {id:"dhr", title:"Hiring and Developing People", sub:"Hiring, growing and letting go, scientifically", min:36},
+    {id:"parl", title:"Performance, Pay and Leadership", sub:"Measuring people without breaking them", min:37},
+    {id:"negotiation", title:"Negotiation", sub:"Getting to yes without giving away the shop", min:25},
+    {id:"mcomm", title:"Business Communication", sub:"Being understood on purpose", min:26}]},
+  {name:"Systems, law and design", eps:[
+    {id:"mis", title:"Information Systems", sub:"Platforms, networks and the right tool", min:33},
+    {id:"legal", title:"Business Law", sub:"Contracts without fear", min:31},
+    {id:"design", title:"Design Thinking", sub:"Falling in love with the problem", min:30}]},
+  {name:"Strategy", eps:[
+    {id:"csg", title:"Competitive Strategy", sub:"Saying no, on purpose", min:37},
+    {id:"corpstrat", title:"Corporate Strategy", sub:"Where to compete, and what the centre adds", min:35}]},
+];
+const EPS = SECTIONS.flatMap(s => { s.eps.forEach(e => e.section = s.name); return s.eps; });
+EPS.forEach((e,i)=>e.idx=i);
+
+// ---------- Helpers ----------
+const $ = id => document.getElementById(id);
+const fmt = s => { if(!isFinite(s)) return "--:--"; s=Math.floor(s); const m=Math.floor(s/60), r=s%60; return (m>=60? Math.floor(m/60)+":"+String(m%60).padStart(2,"0") : m)+":"+String(r).padStart(2,"0"); };
+const store = { get(k){ try{return JSON.parse(localStorage.getItem("dnl-"+k) ?? localStorage.getItem("agmp-"+k));}catch(e){return null;} }, set(k,v){ try{localStorage.setItem("dnl-"+k,JSON.stringify(v));}catch(e){} } };
+const pos = store.get("pos") || {};
+
+// ---------- Build the list ----------
+const list = $("list");
+SECTIONS.forEach(sec => {
+  const h = document.createElement("div"); h.className="section-head";
+  h.innerHTML = `<h2>${sec.name}</h2><span class="count">${sec.eps.length} episode${sec.eps.length>1?"s":""}</span>`;
+  list.appendChild(h);
+  sec.eps.forEach(e => {
+    const row = document.createElement("div"); row.className="track"; row.id="tr-"+e.id; row.dataset.id=e.id;
+    row.innerHTML = `<div class="n"><span>${e.idx===0?"★":e.idx}</span></div>
+      <div class="t"><div class="title">${e.title}</div><div class="sub">${e.sub}</div></div>
+      <div class="r"><div class="prog" id="pg-${e.id}"><i></i></div><button class="read" data-read="${e.id}">Read along</button><span class="dur" id="d-${e.id}">${e.min} min</span></div>`;
+    row.addEventListener("click", ev => { if(ev.target.closest("[data-read]")) return; play(e.idx); });
+    list.appendChild(row);
+    const p = pos[e.id]; if(p && p.t>20 && p.d){ const pg=$("pg-"+e.id); pg.classList.add("show"); pg.firstChild.style.width=(100*p.t/p.d)+"%"; }
+  });
+});
+document.querySelectorAll("[data-read]").forEach(b => b.addEventListener("click", ev => { ev.stopPropagation(); openScript(b.dataset.read); }));
+
+// Probe which files exist (HEAD), mark missing ones.
+EPS.forEach(e => {
+  fetch("audio/"+e.id+".mp3",{method:"HEAD"}).then(r=>{ if(!r.ok) markMissing(e); }).catch(()=>{ /* file:// or offline: leave as is, the player will report */ });
+});
+function markMissing(e){ e.missing=true; const r=$("tr-"+e.id); r.querySelector(".dur").outerHTML='<span class="na">Not yet generated</span>'; r.style.opacity=.6; }
+
+// ---------- Player ----------
+const au = $("au");
+let cur = -1;
+const RATES=[1,1.25,1.5,1.75,2];
+let rate = store.get("rate") || 1; au.playbackRate = rate; $("p-rate").textContent = rate.toFixed(rate%1?2:1).replace(/0$/,"")+"×";
+
+function load(i, autoplay=true){
+  const e = EPS[i]; if(!e) return;
+  if(cur>=0) $("tr-"+EPS[cur].id).classList.remove("active","playing");
+  cur = i;
+  au.src = "audio/"+e.id+".mp3";
+  au.playbackRate = rate;
+  $("p-title").textContent = e.title; $("p-sub").textContent = e.section+" · "+e.sub;
+  $("tr-"+e.id).classList.add("active");
+  document.title = e.title+" · The Listening Library";
+  const p = pos[e.id]; if(p && p.t>5 && p.d && p.t < p.d-10){ au.addEventListener("loadedmetadata", ()=>{ au.currentTime=p.t; }, {once:true}); }
+  store.set("last", e.id);
+  if(autoplay) au.play().catch(()=>{});
+}
+function play(i){ if(cur===i){ toggle(); return; } load(i,true); }
+function toggle(){ if(cur<0){ load(0,true); return; } au.paused ? au.play() : au.pause(); }
+function next(){ let i=cur+1; while(i<EPS.length && EPS[i].missing) i++; if(i<EPS.length) load(i,true); }
+function prev(){ if(au.currentTime>5){ au.currentTime=0; return; } let i=cur-1; while(i>=0 && EPS[i].missing) i--; if(i>=0) load(i,true); }
+
+const PLAY='<path d="M8 5v14l11-7z"/>', PAUSE='<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+au.addEventListener("play", ()=>{ $("p-play-icon").innerHTML=PAUSE; if(cur>=0) $("tr-"+EPS[cur].id).classList.add("playing"); });
+au.addEventListener("pause", ()=>{ $("p-play-icon").innerHTML=PLAY; if(cur>=0) $("tr-"+EPS[cur].id).classList.remove("playing"); });
+au.addEventListener("ended", ()=>{ if(cur>=0){ pos[EPS[cur].id]={t:0,d:au.duration}; store.set("pos",pos); $("pg-"+EPS[cur].id).classList.remove("show"); } next(); });
+au.addEventListener("loadedmetadata", ()=>{ $("p-dur").textContent=fmt(au.duration); if(cur>=0) $("d-"+EPS[cur].id).textContent=Math.round(au.duration/60)+" min"; });
+let tick=0;
+au.addEventListener("timeupdate", ()=>{
+  const d=au.duration||0, t=au.currentTime;
+  $("p-cur").textContent=fmt(t); $("p-fill").style.width=d?(100*t/d)+"%":"0";
+  if(cur>=0 && d){ const pg=$("pg-"+EPS[cur].id); pg.classList.add("show"); pg.firstChild.style.width=(100*t/d)+"%";
+    if(++tick%8===0){ pos[EPS[cur].id]={t,d}; store.set("pos",pos); } }
+});
+au.addEventListener("error", ()=>{ if(cur>=0){ $("p-sub").textContent="This episode's audio is not available yet"; } });
+
+$("p-play").onclick=toggle; $("p-next").onclick=next; $("p-prev").onclick=prev;
+$("p-back").onclick=()=>{ au.currentTime=Math.max(0,au.currentTime-15); };
+$("p-fwd").onclick=()=>{ au.currentTime=Math.min(au.duration||0,au.currentTime+30); };
+$("p-bar").onclick=ev=>{ const r=ev.currentTarget.getBoundingClientRect(); if(au.duration) au.currentTime=au.duration*(ev.clientX-r.left)/r.width; };
+$("p-rate").onclick=()=>{ rate=RATES[(RATES.indexOf(rate)+1)%RATES.length]; au.playbackRate=rate; store.set("rate",rate); $("p-rate").textContent=rate.toFixed(rate%1?2:1).replace(/0$/,"")+"×"; };
+$("play-all").onclick=()=>load(0,true);
+const last = store.get("last"); const li = EPS.findIndex(e=>e.id===last);
+if(li>=0 && pos[last] && pos[last].t>20){ $("resume").hidden=false; $("resume").textContent="Resume: "+EPS[li].title; $("resume").onclick=()=>load(li,true); }
+document.addEventListener("keydown", ev=>{ if(ev.target.tagName==="INPUT") return; if(ev.code==="Space"){ ev.preventDefault(); toggle(); } if(ev.code==="ArrowRight") $("p-fwd").click(); if(ev.code==="ArrowLeft") $("p-back").click(); });
+if("mediaSession" in navigator){
+  navigator.mediaSession.setActionHandler("play", ()=>au.play()); navigator.mediaSession.setActionHandler("pause", ()=>au.pause());
+  navigator.mediaSession.setActionHandler("nexttrack", next); navigator.mediaSession.setActionHandler("previoustrack", prev);
+  au.addEventListener("play", ()=>{ if(cur>=0) navigator.mediaSession.metadata=new MediaMetadata({title:EPS[cur].title, artist:"The Listening Library", album:EPS[cur].section}); });
+}
+
+// ---------- Read-along drawer ----------
+const cache={};
+function openScript(id){
+  const e=EPS.find(x=>x.id===id); $("drawer-kicker").textContent=e.section; $("drawer-title").textContent=e.title;
+  $("drawer").classList.add("open"); $("drawer").setAttribute("aria-hidden","false");
+  const body=$("drawer-body");
+  if(cache[id]){ body.innerHTML=cache[id]; return; }
+  body.innerHTML="<p>Loading the script…</p>";
+  fetch("scripts/"+id+".txt").then(r=>{ if(!r.ok) throw 0; return r.text(); }).then(t=>{
+    cache[id]=t.split(/\n\s*\n/).map(p=>"<p>"+p.replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</p>").join("");
+    body.innerHTML=cache[id];
+  }).catch(()=>{ body.innerHTML="<p>The script could not be loaded. When this page is served over HTTP (for example on GitHub Pages) the scripts folder loads here.</p>"; });
+}
+$("drawer-close").onclick=()=>{ $("drawer").classList.remove("open"); $("drawer").setAttribute("aria-hidden","true"); };
+$("drawer").addEventListener("click", ev=>{ if(ev.target===$("drawer")) $("drawer-close").click(); });
+document.addEventListener("keydown", ev=>{ if(ev.key==="Escape") $("drawer-close").click(); });
+</script>
+</body>
+</html>
