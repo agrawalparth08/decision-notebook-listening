@@ -144,7 +144,7 @@ footer p{margin:.3rem 0}
       <div class="kicker">Audio series · The Decision Notebook</div>
       <h1>The Listening Library</h1>
       <p>Twenty-five general management subjects, as full-length episodes for the ears. One thread per subject, the frameworks as tools, and the case stories told properly. Built for the commute, the walk, and the fifteen minutes before you sleep.</p>
-      <div class="meta"><b>25 episodes</b> · <b id="total-hours">about 12.5 hours</b> · Narrated in Parth's voice</div>
+      <div class="meta"><b>25 episodes</b> · <b id="total-hours">about 15 hours</b> · Narrated in Parth's voice</div>
       <div class="actions">
         <button class="btn primary" id="play-all"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play from the start</button>
         <button class="btn ghost" id="resume" hidden>Resume where I left off</button>
@@ -212,38 +212,38 @@ footer p{margin:.3rem 0}
 // ---------- Episode catalogue ----------
 const SECTIONS = [
   {name:"Start here", eps:[
-    {id:"trailer", title:"The Series", sub:"Series trailer", min:1}]},
+    {id:"trailer", title:"The Series", sub:"Series trailer", min:2}]},
   {name:"Economics and policy", eps:[
-    {id:"micro", title:"Microeconomics", sub:"Prices, choices and the games underneath", min:33},
-    {id:"economics", title:"Macroeconomics and Policy", sub:"Reading the whole economy without fear", min:29},
-    {id:"india", title:"Indian Economy", sub:"The giant, examined honestly", min:34}]},
+    {id:"micro", title:"Microeconomics", sub:"Prices, choices and the games underneath", min:39},
+    {id:"economics", title:"Macroeconomics and Policy", sub:"Reading the whole economy without fear", min:34},
+    {id:"india", title:"Indian Economy", sub:"The giant, examined honestly", min:40}]},
   {name:"Finance and accounting", eps:[
-    {id:"fra", title:"Financial Statement Analysis", sub:"Reading the numbers like a sceptic", min:28},
-    {id:"mcc", title:"Cost Accounting and Control", sub:"What things really cost", min:32},
-    {id:"corpfin", title:"Corporate Finance", sub:"What money costs", min:33}]},
+    {id:"fra", title:"Financial Statement Analysis", sub:"Reading the numbers like a sceptic", min:33},
+    {id:"mcc", title:"Cost Accounting and Control", sub:"What things really cost", min:39},
+    {id:"corpfin", title:"Corporate Finance", sub:"What money costs", min:38}]},
   {name:"Operations and decisions", eps:[
-    {id:"ops", title:"Operations Management", sub:"Flow, bottlenecks and the tyranny of variability", min:31},
-    {id:"qdm", title:"Decision Analysis", sub:"Thinking in probabilities without pain", min:28},
-    {id:"mc", title:"Spreadsheet Modelling", sub:"Spreadsheets that tell the truth", min:29},
-    {id:"bigdata", title:"Business Analytics", sub:"From data to decisions, carefully", min:29}]},
+    {id:"ops", title:"Operations Management", sub:"Flow, bottlenecks and the tyranny of variability", min:37},
+    {id:"qdm", title:"Decision Analysis", sub:"Thinking in probabilities without pain", min:34},
+    {id:"mc", title:"Spreadsheet Modelling", sub:"Spreadsheets that tell the truth", min:34},
+    {id:"bigdata", title:"Business Analytics", sub:"From data to decisions, carefully", min:34}]},
   {name:"Markets and customers", eps:[
-    {id:"marketing", title:"Marketing", sub:"Choosing customers, then deserving them", min:30},
-    {id:"asp", title:"Advertising and Digital Marketing", sub:"Buying attention without burning trust", min:27},
-    {id:"retail", title:"Retail and Customer Relationships", sub:"The store strikes back", min:34}]},
+    {id:"marketing", title:"Marketing", sub:"Choosing customers, then deserving them", min:37},
+    {id:"asp", title:"Advertising and Digital Marketing", sub:"Buying attention without burning trust", min:32},
+    {id:"retail", title:"Retail and Customer Relationships", sub:"The store strikes back", min:40}]},
   {name:"People and organisation", eps:[
-    {id:"ob", title:"Organisational Behaviour", sub:"Why good people do puzzling things", min:31},
-    {id:"od", title:"Organisational Change and Culture", sub:"Why change programmes stall", min:32},
-    {id:"dhr", title:"Hiring and Developing People", sub:"Hiring, growing and letting go, scientifically", min:36},
-    {id:"parl", title:"Performance, Pay and Leadership", sub:"Measuring people without breaking them", min:37},
-    {id:"negotiation", title:"Negotiation", sub:"Getting to yes without giving away the shop", min:25},
-    {id:"mcomm", title:"Business Communication", sub:"Being understood on purpose", min:26}]},
+    {id:"ob", title:"Organisational Behaviour", sub:"Why good people do puzzling things", min:38},
+    {id:"od", title:"Organisational Change and Culture", sub:"Why change programmes stall", min:37},
+    {id:"dhr", title:"Hiring and Developing People", sub:"Hiring, growing and letting go, scientifically", min:42},
+    {id:"parl", title:"Performance, Pay and Leadership", sub:"Measuring people without breaking them", min:44},
+    {id:"negotiation", title:"Negotiation", sub:"Getting to yes without giving away the shop", min:30},
+    {id:"mcomm", title:"Business Communication", sub:"Being understood on purpose", min:31}]},
   {name:"Systems, law and design", eps:[
-    {id:"mis", title:"Information Systems", sub:"Platforms, networks and the right tool", min:33},
-    {id:"legal", title:"Business Law", sub:"Contracts without fear", min:31},
-    {id:"design", title:"Design Thinking", sub:"Falling in love with the problem", min:30}]},
+    {id:"mis", title:"Information Systems", sub:"Platforms, networks and the right tool", min:39},
+    {id:"legal", title:"Business Law", sub:"Contracts without fear", min:36},
+    {id:"design", title:"Design Thinking", sub:"Falling in love with the problem", min:35}]},
   {name:"Strategy", eps:[
-    {id:"csg", title:"Competitive Strategy", sub:"Saying no, on purpose", min:37},
-    {id:"corpstrat", title:"Corporate Strategy", sub:"Where to compete, and what the centre adds", min:35}]},
+    {id:"csg", title:"Competitive Strategy", sub:"Saying no, on purpose", min:42},
+    {id:"corpstrat", title:"Corporate Strategy", sub:"Where to compete, and what the centre adds", min:42}]},
 ];
 const EPS = SECTIONS.flatMap(s => { s.eps.forEach(e => e.section = s.name); return s.eps; });
 EPS.forEach((e,i)=>e.idx=i);
