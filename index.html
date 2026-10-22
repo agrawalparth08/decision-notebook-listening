@@ -251,7 +251,7 @@ EPS.forEach((e,i)=>e.idx=i);
 // ---------- Helpers ----------
 const $ = id => document.getElementById(id);
 const fmt = s => { if(!isFinite(s)) return "--:--"; s=Math.floor(s); const m=Math.floor(s/60), r=s%60; return (m>=60? Math.floor(m/60)+":"+String(m%60).padStart(2,"0") : m)+":"+String(r).padStart(2,"0"); };
-const store = { get(k){ try{return JSON.parse(localStorage.getItem("dnl-"+k) ?? localStorage.getItem("agmp-"+k));}catch(e){return null;} }, set(k,v){ try{localStorage.setItem("dnl-"+k,JSON.stringify(v));}catch(e){} } };
+const store = { get(k){ try{return JSON.parse(localStorage.getItem("dnl-"+k));}catch(e){return null;} }, set(k,v){ try{localStorage.setItem("dnl-"+k,JSON.stringify(v));}catch(e){} } };
 const pos = store.get("pos") || {};
 
 // ---------- Build the list ----------
